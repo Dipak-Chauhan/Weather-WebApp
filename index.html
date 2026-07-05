@@ -3,80 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Weather App</title>
+    <!-- Google Fonts: Outfit for Expressive M3 Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Remix Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css">
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css"rel="stylesheet"/>
-    <title>Weather App</title>
 </head>
 <body>
     
-    <div class="main">
+    <!-- Dynamic background overlay -->
+    <div class="bg-overlay" id="bgOverlay"></div>
+
+    <main class="dashboard">
         
-        <div class="searcharea">
-                    
-            <form id="searchForm">
-
-            <input type="text" placeholder="Enter Your Location">
-            
-            <button type="submit" class="searchbtn">
-                <i class="ri-search-line"></i>
-            </button>
-
+        <!-- Search Section -->
+        <header class="search-header">
+            <form id="searchForm" class="search-bar">
+                <i class="ri-search-line search-icon"></i>
+                <input type="text" id="searchInput" placeholder="Search for a city..." autocomplete="off">
+                <button type="button" id="locationBtn" class="icon-btn" aria-label="Use Current Location" title="Current Location">
+                    <i class="ri-map-pin-user-fill"></i>
+                </button>
             </form>
-        
+            
+            <!-- Recent Searches Chips -->
+            <div class="recent-searches" id="recentSearches">
+                <!-- Chips will be injected here via JS -->
+            </div>
+        </header>
+
+        <!-- Loading State -->
+        <div class="loader-container" id="loader" style="display: none;">
+            <div class="spinner"></div>
+            <p>Fetching weather data...</p>
         </div>
 
-        <div class="locationerror">
-
-            <img src="images/error.png">
-
-            <h2>Location not found :(</h2>
-
+        <!-- Error State -->
+        <div class="error-state" id="errorState" style="display: none;">
+            <img src="images/error.png" alt="Error" class="error-img">
+            <h2 id="errorMessage">Location not found</h2>
+            <p>Please try a different search term.</p>
         </div>
 
-        <div class="weatherinfo">
+        <!-- Weather Content (Hidden by default until data loads) -->
+        <div class="weather-content" id="weatherContent" style="display: none;">
+            
+            <div class="top-row">
+                <!-- Current Weather Hero -->
+                <section class="current-weather card hero-card">
+                    <div class="hero-header">
+                        <div>
+                            <h1 class="city-name" id="cityName">--</h1>
+                            <span class="country-badge" id="countryBadge">--</span>
+                        </div>
+                        <span class="date-info" id="currentDate">--</span>
+                    </div>
+                    
+                    <div class="hero-body">
+                        <img src="images/clearatday.png" alt="Weather Icon" class="main-weather-icon" id="mainWeatherIcon">
+                        <div class="temp-wrapper">
+                            <h2 class="temp" id="currentTemp">--°</h2>
+                            <p class="description" id="weatherDesc">--</p>
+                        </div>
+                    </div>
+                </section>
 
-            <img src="">
+                <!-- Weather Details Grid -->
+                <section class="details-grid">
+                    <div class="card detail-card">
+                        <div class="detail-header">
+                            <i class="ri-temp-hot-line"></i>
+                            <span>Feels Like</span>
+                        </div>
+                        <h3 id="feelsLike">--°</h3>
+                    </div>
 
-            <h2 class="tempinfo"></h2>
+                    <div class="card detail-card">
+                        <div class="detail-header">
+                            <i class="ri-mist-fill"></i>
+                            <span>Humidity</span>
+                        </div>
+                        <h3 id="humidity">--%</h3>
+                    </div>
 
-            <h2 class="dayinfo"></h2>
+                    <div class="card detail-card">
+                        <div class="detail-header">
+                            <i class="ri-windy-fill"></i>
+                            <span>Wind Speed</span>
+                        </div>
+                        <h3 id="windSpeed">-- km/h</h3>
+                    </div>
 
-        </div>
+                    <div class="card detail-card" id="aqiCard">
+                        <div class="detail-header">
+                            <i class="ri-bubble-chart-line"></i>
+                            <span>Air Quality</span>
+                        </div>
+                        <div class="aqi-body">
+                            <h3 id="aqiValue">--</h3>
+                            <span class="aqi-badge" id="aqiStatus">--</span>
+                        </div>
+                    </div>
 
-        <div class="weatherinfo2">
+                    <div class="card detail-card">
+                        <div class="detail-header">
+                            <i class="ri-compasses-2-line"></i>
+                            <span>Pressure</span>
+                        </div>
+                        <h3 id="pressure">-- hPa</h3>
+                    </div>
 
-            <div class="humidity">
+                    <div class="card detail-card">
+                        <div class="detail-header">
+                            <i class="ri-eye-line"></i>
+                            <span>Visibility</span>
+                        </div>
+                        <h3 id="visibility">-- km</h3>
+                    </div>
 
-                <i class="ri-mist-fill"></i>
-
-                <div class="humidityinfo">
-
-                    <span></span>
-                    <h2>Humidity</h2>
-
-                </div>
-
+                    <div class="card detail-card sunrise-sunset">
+                        <div class="sun-item">
+                            <i class="ri-sunrise-line"></i>
+                            <div>
+                                <span class="label">Sunrise</span>
+                                <span class="time" id="sunriseTime">--:--</span>
+                            </div>
+                        </div>
+                        <div class="sun-item">
+                            <i class="ri-sunset-line"></i>
+                            <div>
+                                <span class="label">Sunset</span>
+                                <span class="time" id="sunsetTime">--:--</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </div>
 
-            <div class="wind">
-
-                <i class="ri-windy-fill"></i>
-
-                <div class="windinfo">
-
-                    <span></span>
-                    <h2>Wind Speed</h2>
-
+            <!-- 5-Day Forecast -->
+            <section class="forecast-section card">
+                <h3 class="section-title">5-Day Forecast</h3>
+                <div class="forecast-container" id="forecastContainer">
+                    <!-- Forecast items injected via JS -->
                 </div>
-
-            </div>
+            </section>
 
         </div>
-
-
-    </div>
+    </main>
 
     <script src="script.js"></script>
-    
 </body>
 </html>
