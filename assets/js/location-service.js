@@ -10,7 +10,7 @@ function getBrowserCoordinates() {
         navigator.geolocation.getCurrentPosition(
             ({ coords }) => resolve({ lat: coords.latitude, lon: coords.longitude }),
             reject,
-            { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 }
+            { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }
         );
     });
 }
