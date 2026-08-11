@@ -3,56 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Weather App</title>
-    <!-- Google Fonts: Outfit for Expressive M3 Typography -->
+    <meta name="description" content="Current weather, air quality, and a five-day forecast for cities worldwide.">
+    <title>Weather Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Remix Icons -->
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
-    
-    <!-- Dynamic background overlay -->
-    <div class="bg-overlay" id="bgOverlay"></div>
+    <div class="bg-overlay" id="bgOverlay" aria-hidden="true"></div>
 
-    <main class="dashboard">
-        
-        <!-- Search Section -->
+    <main class="dashboard" aria-label="Weather dashboard">
         <header class="search-header">
             <form id="searchForm" class="search-bar">
                 <i class="ri-search-line search-icon"></i>
-                <input type="text" id="searchInput" placeholder="Search for a city..." autocomplete="off">
+                <label class="sr-only" for="searchInput">Search for a city</label>
+                <input type="search" id="searchInput" placeholder="Search for a city..." autocomplete="off" required>
                 <button type="button" id="locationBtn" class="icon-btn" aria-label="Use Current Location" title="Current Location">
                     <i class="ri-map-pin-user-fill"></i>
                 </button>
+                <button type="submit" class="icon-btn search-submit" aria-label="Search">
+                    <i class="ri-arrow-right-line"></i>
+                </button>
             </form>
-            
-            <!-- Recent Searches Chips -->
-            <div class="recent-searches" id="recentSearches">
-                <!-- Chips will be injected here via JS -->
-            </div>
+            <div class="recent-searches" id="recentSearches" aria-label="Recent searches"></div>
         </header>
 
-        <!-- Loading State -->
-        <div class="loader-container" id="loader" style="display: none;">
+        <div class="loader-container" id="loader" hidden aria-live="polite">
             <div class="spinner"></div>
             <p>Fetching weather data...</p>
         </div>
 
-        <!-- Error State -->
-        <div class="error-state" id="errorState" style="display: none;">
-            <img src="images/error.png" alt="Error" class="error-img">
+        <div class="error-state" id="errorState" hidden role="alert">
+            <img src="assets/images/error.png" alt="" class="error-img">
             <h2 id="errorMessage">Location not found</h2>
-            <p>Please try a different search term.</p>
+            <p id="errorDetail">Please try a different search term.</p>
         </div>
 
-        <!-- Weather Content (Hidden by default until data loads) -->
-        <div class="weather-content" id="weatherContent" style="display: none;">
-            
+        <div class="weather-content" id="weatherContent" hidden>
             <div class="top-row">
-                <!-- Current Weather Hero -->
                 <section class="current-weather card hero-card">
                     <div class="hero-header">
                         <div>
@@ -63,7 +53,7 @@
                     </div>
                     
                     <div class="hero-body">
-                        <img src="images/clearatday.png" alt="Weather Icon" class="main-weather-icon" id="mainWeatherIcon">
+                        <img src="assets/images/clearatday.png" alt="" class="main-weather-icon" id="mainWeatherIcon">
                         <div class="temp-wrapper">
                             <h2 class="temp" id="currentTemp">--°</h2>
                             <p class="description" id="weatherDesc">--</p>
@@ -71,7 +61,6 @@
                     </div>
                 </section>
 
-                <!-- Weather Details Grid -->
                 <section class="details-grid">
                     <div class="card detail-card">
                         <div class="detail-header">
@@ -143,17 +132,13 @@
                 </section>
             </div>
 
-            <!-- 5-Day Forecast -->
             <section class="forecast-section card">
                 <h3 class="section-title">5-Day Forecast</h3>
-                <div class="forecast-container" id="forecastContainer">
-                    <!-- Forecast items injected via JS -->
-                </div>
+                <div class="forecast-container" id="forecastContainer"></div>
             </section>
-
         </div>
     </main>
 
-    <script src="script.js"></script>
+    <script type="module" src="assets/js/app.js"></script>
 </body>
 </html>

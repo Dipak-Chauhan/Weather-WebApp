@@ -1,0 +1,10 @@
+{
+  "name": "weather-webapp",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node --check assets/js/app.js && node --check assets/js/config.js && node --check assets/js/location-service.js && node --check assets/js/recent-searches.js && node --check assets/js/weather-api.js && node --check assets/js/weather-ui.js && node --check assets/js/weather-utils.js",
+    "test": "node --test"
+  }
+}
