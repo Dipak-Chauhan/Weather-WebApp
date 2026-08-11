@@ -42,11 +42,15 @@ export async function getSuggestedLocation() {
     try {
         return await getBrowserCoordinates(HIGH_ACCURACY_OPTIONS);
     } catch (error) {
-        if (error?.code !== 1) {
-            try {
-                return await getBrowserCoordinates(STANDARD_ACCURACY_OPTIONS);
-            } catch {
-                // Use IP lookup when neither browser positioning mode succeeds.
+        if (error?.code === 1) {
+            return null;
+        }
+
+        try {
+            return await getBrowserCoordinates(STANDARD_ACCURACY_OPTIONS);
+        } catch (fallbackError) {
+            if (fallbackError?.code === 1) {
+                return null;
             }
         }
     }

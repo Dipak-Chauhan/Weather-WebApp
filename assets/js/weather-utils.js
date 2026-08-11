@@ -1,4 +1,5 @@
 const ICON_DIRECTORY = new URL('../images/', import.meta.url);
+const OPENWEATHER_ICON_DIRECTORY = 'https://openweathermap.org/img/wn/';
 
 const AQI_RANGES = [
     { pmLow: 0, pmHigh: 12, indexLow: 0, indexHigh: 50, label: 'Good', className: 'aqi-good' },
@@ -24,6 +25,10 @@ function getIconFile(condition, isDay) {
 }
 
 export function getWeatherIcon(condition, timestamp, sunrise, sunset) {
+    if (condition.icon) {
+        return `${OPENWEATHER_ICON_DIRECTORY}${condition.icon}@2x.png`;
+    }
+
     const isDay = sunrise && sunset
         ? timestamp > sunrise && timestamp < sunset
         : condition.icon?.endsWith('d');

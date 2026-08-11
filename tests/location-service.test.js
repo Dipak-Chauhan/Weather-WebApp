@@ -54,12 +54,14 @@ test('retries browser positioning without high accuracy after a timeout', async 
     ]);
 });
 
-test('uses the secondary IP provider when permission is denied and the first provider fails', async (testContext) => {
+test('uses the secondary IP provider when both browser positioning attempts fail', async (testContext) => {
     const endpoints = [];
+    let browserAttempts = 0;
     replaceGlobal(testContext, 'navigator', {
         geolocation: {
             getCurrentPosition(resolve, reject) {
-                reject({ code: 1 });
+                browserAttempts += 1;
+                reject({ code: 3 });
             }
         }
     });
@@ -77,5 +79,24 @@ test('uses the secondary IP provider when permission is denied and the first pro
     });
 
     assert.deepEqual(await getSuggestedLocation(), { lat: 21.61, lon: 71.23 });
+    assert.equal(browserAttempts, 2);
     assert.deepEqual(endpoints, ['https://freeipapi.com/api/json', 'https://ipwho.is/']);
+});
+
+test('does not replace denied browser location access with an imprecise IP city', async (testContext) => {
+    let fetched = false;
+    replaceGlobal(testContext, 'navigator', {
+        geolocation: {
+            getCurrentPosition(resolve, reject) {
+                reject({ code: 1 });
+            }
+        }
+    });
+    replaceGlobal(testContext, 'fetch', async () => {
+        fetched = true;
+        throw new Error('IP lookup should not run');
+    });
+
+    assert.equal(await getSuggestedLocation(), null);
+    assert.equal(fetched, false);
 });

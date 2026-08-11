@@ -147,7 +147,7 @@ export function createWeatherView() {
                 : isLocationUnavailable ? 'Location unavailable' : 'Unable to load weather';
             elements.errorDetail.textContent = isMissingLocation
                 ? 'Please try a different city or spelling.'
-                : isLocationUnavailable ? 'Allow location access or search for a city.' : 'Check your connection and try again.';
+                : isLocationUnavailable ? 'Allow precise location access in your browser or search for a city.' : 'Check your connection and try again.';
             setVisibleState('error');
         },
 
