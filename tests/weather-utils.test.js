@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { getAqi, getBackgroundClass, getDailyForecast, getWeatherIcon } from '../assets/js/weather-utils.js';
+import { getAqi, getBackgroundClass, getDailyForecast, getWeatherFallbackIcon, getWeatherIcon } from '../assets/js/weather-utils.js';
 
 test('calculates US AQI from PM2.5 concentrations', () => {
     assert.deepEqual(getAqi(10), { value: 42, label: 'Good', className: 'aqi-good' });
@@ -18,6 +18,10 @@ test('chooses a weather theme from the reported conditions', () => {
 test('uses OpenWeather icons and retains module-relative image fallbacks', () => {
     assert.equal(getWeatherIcon({ id: 800, icon: '01d' }), 'https://openweathermap.org/img/wn/01d@2x.png');
     assert.match(getWeatherIcon({ id: 500 }, 500, 100, 900), /assets\/images\/rainatday\.png$/);
+});
+
+test('provides a network-independent inline fallback icon', () => {
+    assert.match(getWeatherFallbackIcon(), /^data:image\/svg\+xml,/);
 });
 
 test('uses the forecast closest to local noon for each day', () => {

@@ -1,5 +1,6 @@
 const ICON_DIRECTORY = new URL('../images/', import.meta.url);
 const OPENWEATHER_ICON_DIRECTORY = 'https://openweathermap.org/img/wn/';
+const FALLBACK_WEATHER_ICON = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Ccircle cx='50' cy='55' r='26' fill='%23dbeafe'/%3E%3Ccircle cx='79' cy='60' r='32' fill='%23dbeafe'/%3E%3Crect x='27' y='58' width='84' height='40' rx='20' fill='%23dbeafe'/%3E%3C/svg%3E";
 
 const AQI_RANGES = [
     { pmLow: 0, pmHigh: 12, indexLow: 0, indexHigh: 50, label: 'Good', className: 'aqi-good' },
@@ -34,6 +35,10 @@ export function getWeatherIcon(condition, timestamp, sunrise, sunset) {
         : condition.icon?.endsWith('d');
 
     return new URL(getIconFile(condition, Boolean(isDay)), ICON_DIRECTORY).href;
+}
+
+export function getWeatherFallbackIcon() {
+    return FALLBACK_WEATHER_ICON;
 }
 
 export function getBackgroundClass(condition, timestamp, sunrise, sunset) {

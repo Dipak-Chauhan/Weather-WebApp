@@ -4,6 +4,7 @@ import {
     getAqi,
     getBackgroundClass,
     getDailyForecast,
+    getWeatherFallbackIcon,
     getWeatherIcon
 } from './weather-utils.js';
 
@@ -45,6 +46,14 @@ function createIcon(className) {
     return icon;
 }
 
+function setWeatherIcon(image, condition, timestamp, sunrise, sunset) {
+    image.onerror = () => {
+        image.onerror = null;
+        image.src = getWeatherFallbackIcon();
+    };
+    image.src = getWeatherIcon(condition, timestamp, sunrise, sunset);
+}
+
 function createForecastItem(entry, timezoneOffset) {
     const item = document.createElement('article');
     item.className = 'forecast-item';
@@ -60,7 +69,7 @@ function createForecastItem(entry, timezoneOffset) {
 
     const icon = document.createElement('img');
     icon.className = 'fc-icon';
-    icon.src = getWeatherIcon(entry.weather[0]);
+    setWeatherIcon(icon, entry.weather[0]);
     icon.alt = entry.weather[0].main;
 
     const temperature = document.createElement('span');
@@ -166,7 +175,7 @@ export function createWeatherView() {
             elements.currentDate.textContent = formatDate(weather.dt, timezone);
             elements.currentTemp.textContent = `${Math.round(weather.main.temp)}°`;
             elements.weatherDescription.textContent = condition.description;
-            elements.mainWeatherIcon.src = getWeatherIcon(condition, weather.dt, sunrise, sunset);
+            setWeatherIcon(elements.mainWeatherIcon, condition, weather.dt, sunrise, sunset);
             elements.mainWeatherIcon.alt = condition.description;
             elements.feelsLike.textContent = `${Math.round(weather.main.feels_like)}°`;
             elements.humidity.textContent = `${weather.main.humidity}%`;
