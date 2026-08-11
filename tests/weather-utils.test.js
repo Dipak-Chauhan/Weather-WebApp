@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { getAqi, getBackgroundClass, getDailyForecast } from '../assets/js/weather-utils.js';
+import { getAqi, getBackgroundClass, getDailyForecast, getWeatherIcon } from '../assets/js/weather-utils.js';
 
 test('calculates US AQI from PM2.5 concentrations', () => {
     assert.deepEqual(getAqi(10), { value: 42, label: 'Good', className: 'aqi-good' });
@@ -13,6 +13,11 @@ test('chooses a weather theme from the reported conditions', () => {
     assert.equal(getBackgroundClass({ main: 'Clear' }, 500, 100, 900), 'clear-day');
     assert.equal(getBackgroundClass({ main: 'Clear' }, 950, 100, 900), 'clear-night');
     assert.equal(getBackgroundClass({ main: 'Thunderstorm' }, 500, 100, 900), 'storm');
+});
+
+test('returns document-relative paths for local weather images', () => {
+    assert.equal(getWeatherIcon({ id: 800, icon: '01d' }), 'assets/images/clearatday.png');
+    assert.equal(getWeatherIcon({ id: 500, icon: '10n' }), 'assets/images/rainatnight.png');
 });
 
 test('uses the forecast closest to local noon for each day', () => {

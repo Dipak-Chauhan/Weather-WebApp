@@ -471,9 +471,10 @@ body {
 
 .forecast-container {
     display: flex;
-    gap: 16px;
+    gap: 12px;
     overflow-x: auto;
-    padding-bottom: 8px;
+    padding: 8px 6px 16px;
+    margin: -8px -6px -16px;
     scrollbar-width: thin;
     scrollbar-color: var(--glass-border) transparent;
 }
@@ -487,9 +488,11 @@ body {
 }
 
 .forecast-item {
-    min-width: 100px;
-    flex: 1;
-    background: rgba(0,0,0,0.15);
+    min-width: 112px;
+    flex: 1 0 112px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.18));
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-md);
     padding: 16px;
@@ -497,12 +500,17 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 8px;
-    transition: transform 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.14);
+    transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.forecast-item:hover {
-    transform: scale(1.05);
-    background: rgba(255,255,255,0.1);
+@media (hover: hover) {
+    .forecast-item:hover {
+        transform: translateY(-4px);
+        background: linear-gradient(145deg, rgba(255, 255, 255, 0.18), rgba(0, 0, 0, 0.18));
+        border-color: rgba(255, 255, 255, 0.36);
+        box-shadow: 0 12px 22px rgba(0, 0, 0, 0.24);
+    }
 }
 
 .fc-day {
@@ -520,6 +528,7 @@ body {
     height: 50px;
     object-fit: contain;
     margin: 8px 0;
+    filter: drop-shadow(0 5px 8px rgba(0, 0, 0, 0.2));
 }
 
 .fc-temp {
