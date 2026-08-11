@@ -1,4 +1,3 @@
-import { DEFAULT_CITY } from './config.js';
 import { getSuggestedLocation } from './location-service.js';
 import { addRecentSearch, getRecentSearches, removeRecentSearch } from './recent-searches.js';
 import { getWeatherData } from './weather-api.js';
@@ -24,7 +23,13 @@ async function loadWeather(query) {
 async function loadCurrentLocation() {
     view.showLoading();
     const location = await getSuggestedLocation();
-    loadWeather(location ?? { city: DEFAULT_CITY });
+
+    if (!location) {
+        view.showError('Location unavailable');
+        return;
+    }
+
+    loadWeather(location);
 }
 
 view.bind({

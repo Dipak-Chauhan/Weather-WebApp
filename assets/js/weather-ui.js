@@ -141,10 +141,13 @@ export function createWeatherView() {
 
         showError(message) {
             const isMissingLocation = message === 'Location not found';
-            elements.errorMessage.textContent = isMissingLocation ? 'City not found' : 'Unable to load weather';
+            const isLocationUnavailable = message === 'Location unavailable';
+            elements.errorMessage.textContent = isMissingLocation
+                ? 'City not found'
+                : isLocationUnavailable ? 'Location unavailable' : 'Unable to load weather';
             elements.errorDetail.textContent = isMissingLocation
                 ? 'Please try a different city or spelling.'
-                : 'Check your connection and try again.';
+                : isLocationUnavailable ? 'Allow location access or search for a city.' : 'Check your connection and try again.';
             setVisibleState('error');
         },
 

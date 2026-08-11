@@ -1,4 +1,4 @@
-const ICON_DIRECTORY = 'assets/images/';
+const ICON_DIRECTORY = new URL('../images/', import.meta.url);
 
 const AQI_RANGES = [
     { pmLow: 0, pmHigh: 12, indexLow: 0, indexHigh: 50, label: 'Good', className: 'aqi-good' },
@@ -28,7 +28,7 @@ export function getWeatherIcon(condition, timestamp, sunrise, sunset) {
         ? timestamp > sunrise && timestamp < sunset
         : condition.icon?.endsWith('d');
 
-    return `${ICON_DIRECTORY}${getIconFile(condition, Boolean(isDay))}`;
+    return new URL(getIconFile(condition, Boolean(isDay)), ICON_DIRECTORY).href;
 }
 
 export function getBackgroundClass(condition, timestamp, sunrise, sunset) {

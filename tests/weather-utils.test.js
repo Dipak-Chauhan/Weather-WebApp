@@ -15,9 +15,9 @@ test('chooses a weather theme from the reported conditions', () => {
     assert.equal(getBackgroundClass({ main: 'Thunderstorm' }, 500, 100, 900), 'storm');
 });
 
-test('returns document-relative paths for local weather images', () => {
-    assert.equal(getWeatherIcon({ id: 800, icon: '01d' }), 'assets/images/clearatday.png');
-    assert.equal(getWeatherIcon({ id: 500, icon: '10n' }), 'assets/images/rainatnight.png');
+test('returns module-relative paths for local weather images', () => {
+    assert.match(getWeatherIcon({ id: 800, icon: '01d' }), /assets\/images\/clearatday\.png$/);
+    assert.match(getWeatherIcon({ id: 500, icon: '10n' }), /assets\/images\/rainatnight\.png$/);
 });
 
 test('uses the forecast closest to local noon for each day', () => {
